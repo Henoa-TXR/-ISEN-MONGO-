@@ -10,10 +10,8 @@ myClient = MongoClient(ConnectionString)
 #Initialisation des collections
 myDB=myClient['Station']
 
-lille_collection=myClient['Lille']
-paris_collection=myClient['Paris']
-rennes_collection=myClient['Rennes']
-lyon_collection=myClient['Lyon']
+exo1_collection=myDB['Exo1']
+test_col=myDB['nom']
 
 #Récupération des données des stations par ville
 
@@ -25,5 +23,16 @@ url="https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-r
 reponse = requests.get(url)
 contenu=reponse.json()
 infos_stations=contenu['records']
-print(len(infos_stations))
-print(infos_stations[0])
+
+#Suppression des données précédentes
+exo1_collection.drop()
+
+#Récupération des données de l'api
+tab=[]
+for input_station in infos_stations:
+    input_json={"ville":"Lille","nomstation":input_station["fields"]["nom"],"nombrevelo":input_station["fields"]["nbvelosdispo"],"nombreplaces":input_station["fields"]["nbplacesdispo"],"etat":input_station["fields"]["etat"],"latitude":input_station["fields"]["localisation"][0],"longitude":input_station["fields"]["localisation"][1]}
+    tab.append(input_json)
+
+#Ajout des données dans la BDD
+exo1_collection.insert_many(tab)
+
