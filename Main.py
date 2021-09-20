@@ -1,15 +1,29 @@
 # Import nécessaire
 from pymongo import MongoClient
 import pymongo
+import requests
 
-# Fonction qui permet de se connecter à la BDD "Station" de Mongo Atlas
-def get_database():
+#Connexion à la base mongo
+ConnectionString = "mongodb+srv://Admin:CharlesLeBG@velo.sudxu.mongodb.net/Station?retryWrites=true&w=majority"
+myClient = MongoClient(ConnectionString)
 
-    ConnectionString = "mongodb+srv://Admin:CharlesLeBG@velo.sudxu.mongodb.net/Station?retryWrites=true&w=majority"
-    client = MongoClient(ConnectionString)
+#Initialisation des collections
+myDB=myClient['Station']
 
-    return client['Station']
+lille_collection=myClient['Lille']
+paris_collection=myClient['Paris']
+rennes_collection=myClient['Rennes']
+lyon_collection=myClient['Lyon']
 
+#Récupération des données des stations par ville
 
-dbname = get_database()
-print(list(dbname.nom.find()))
+#LILLE
+
+#Récupération de l'API
+url="https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&rows=-1&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion"
+
+reponse = requests.get(url)
+contenu=reponse.json()
+infos_stations=contenu['records']
+print(len(infos_stations))
+print(infos_stations[0])
