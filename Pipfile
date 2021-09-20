@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 pymongo = {extras = ["srv"], version = "1.16.0"}
+requests = "2.26.0"
 
 [dev-packages]
 
