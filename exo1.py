@@ -89,3 +89,28 @@ if(len(tab1)==len(tab2)):
 
 #Ajout des données dans la BDD
 exo1_collection.insert_many(tab)
+
+
+
+#               LYON
+
+
+#Récupération de l'API
+url="https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?compact=false"
+
+reponse = requests.get(url)
+contenu=reponse.json()
+infos_stations=contenu['values']
+
+#Récupération des données de l'api
+tab=[]
+for input_station in infos_stations:
+    if(input_station["status"]=="OPEN"):
+        etat="EN SERVICE"
+    else:
+        etat="HORS SERVICE"
+    input_json={"ville":"Lyon","nomstation":input_station["pole"],"nombrevelo":input_station["available_bikes"],"nombreplaces":input_station["available_bike_stands"],"etat":etat,"latitude":input_station["lat"],"longitude":input_station["lng"]}
+    tab.append(input_json)
+
+#Ajout des données dans la BDD
+exo1_collection.insert_many(tab)
