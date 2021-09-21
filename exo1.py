@@ -47,7 +47,7 @@ exo1_collection.insert_many(tab)
 
 
 
-#Pour les vélos parisiens, nous avons besoin de 2 API différentes
+#Pour les vélos parisiens, nous avons besoin de 2 API différentes.
 #La récupération des données se fera donc en 2 étapes
 
 #Récupération de la première API (nom des stations, coordonnées)
