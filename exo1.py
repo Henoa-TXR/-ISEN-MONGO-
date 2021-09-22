@@ -114,3 +114,30 @@ for input_station in infos_stations:
 
 #Ajout des données dans la BDD
 exo1_collection.insert_many(tab)
+
+
+
+
+#               Rennes
+
+
+
+#Récupération de l'API
+url="https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&q=&rows=-1&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"
+
+reponse = requests.get(url)
+contenu=reponse.json()
+infos_stations=contenu['records']
+
+#Récupération des données de l'api
+tab=[]
+for input_station in infos_stations:
+    if(input_station["fields"]["etat"]=="En fonctionnement"):
+        etat="EN SERVICE"
+    else:
+        etat="HORS SERVICE"
+    input_json={"ville":"Rennes","nomstation":input_station["fields"]["nom"],"nombrevelo":input_station["fields"]["nombrevelosdisponibles"],"nombreplaces":input_station["fields"]["nombreemplacementsdisponibles"],"etat":etat,"latitude":input_station["fields"]["coordonnees"][0],"longitude":input_station["fields"]["coordonnees"][1]}
+    tab.append(input_json)
+
+#Ajout des données dans la BDD
+exo1_collection.insert_many(tab)
