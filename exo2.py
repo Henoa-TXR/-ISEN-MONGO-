@@ -118,7 +118,7 @@ def rennes():
 
 
 #Connexion à la base mongo
-ConnectionString = "mongodb+srv://Admin:CharlesLeBG@velo.sudxu.mongodb.net/Station?retryWrites=true&w=majority"
+ConnectionString = "localhost:27017"
 myClient = MongoClient(ConnectionString)
 
 #Initialisation des collections
