@@ -27,21 +27,28 @@ exo1_collection.create_index([("location",GEOSPHERE)])
 
 
 
-# #Récupération de l'API
-# url="https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&rows=-1&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion"
+#Récupération de l'API
+url="https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&rows=-1&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion"
 
-# reponse = requests.get(url)
-# contenu=reponse.json()
-# infos_stations=contenu['records']
+reponse = requests.get(url)
+contenu=reponse.json()
+infos_stations=contenu['records']
 
-# #Récupération des données de l'api
-# tab=[]
-# for input_station in infos_stations:
-#     input_json={"ville":"Lille","nomstation":input_station["fields"]["nom"],"nombrevelo":input_station["fields"]["nbvelosdispo"],"nombreplaces":input_station["fields"]["nbplacesdispo"],"etat":input_station["fields"]["etat"],"localisation":input_station["fields"]["localisation"]}
-#     tab.append(input_json)
+lilleTab1=[]
+for input_station in infos_stations:
+    input_tab=input_station["fields"]["localisation"]
+    lilleTab1.append(input_tab)
 
-# #Ajout des données dans la BDD
-# exo1_collection.insert_many(tab)
+#Récupération des données de l'api
+lilleTab=[]
+i=0
+for input_station in infos_stations:
+    input_json={"ville":"Lille","nomstation":input_station["fields"]["nom"],"nombrevelo":input_station["fields"]["nbvelosdispo"],"nombreplaces":input_station["fields"]["nbplacesdispo"],"etat":input_station["fields"]["etat"],"location":{"type":"Point", "coordinates":lilleTab1[i]}}
+    lilleTab.append(input_json)
+    i=i+1
+
+#Ajout des données dans la BDD
+exo1_collection.insert_many(lilleTab)
 
 
 
@@ -131,22 +138,30 @@ exo1_collection.insert_many(lyonTab)
 
 
 
-# #Récupération de l'API
-# url="https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&q=&rows=-1&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"
+#Récupération de l'API
+url="https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&q=&rows=-1&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"
 
-# reponse = requests.get(url)
-# contenu=reponse.json()
-# infos_stations=contenu['records']
+reponse = requests.get(url)
+contenu=reponse.json()
+infos_stations=contenu['records']
 
-# #Récupération des données de l'api
-# tab=[]
-# for input_station in infos_stations:
-#     if(input_station["fields"]["etat"]=="En fonctionnement"):
-#         etat="EN SERVICE"
-#     else:
-#         etat="HORS SERVICE"
-#     input_json={"ville":"Rennes","nomstation":input_station["fields"]["nom"],"nombrevelo":input_station["fields"]["nombrevelosdisponibles"],"nombreplaces":input_station["fields"]["nombreemplacementsdisponibles"],"etat":etat,"localisation":input_station["fields"]["coordonnees"]}
-#     tab.append(input_json)
+#Récupération des données de l'api
 
-# #Ajout des données dans la BDD
-# exo1_collection.insert_many(tab)
+rennesTab1=[]
+for input_station in infos_stations:
+    input_tab=input_station["fields"]["coordonnees"]
+    rennesTab1.append(input_tab)
+
+rennesTab=[]
+i=0
+for input_station in infos_stations:
+    if(input_station["fields"]["etat"]=="En fonctionnement"):
+        etat="EN SERVICE"
+    else:
+        etat="HORS SERVICE"
+    input_json={"ville":"Rennes","nomstation":input_station["fields"]["nom"],"nombrevelo":input_station["fields"]["nombrevelosdisponibles"],"nombreplaces":input_station["fields"]["nombreemplacementsdisponibles"],"etat":etat,"location":{"type":"Point", "coordinates":rennesTab1[i]}}
+    rennesTab.append(input_json)
+    i=i+1
+
+#Ajout des données dans la BDD
+exo1_collection.insert_many(rennesTab)
