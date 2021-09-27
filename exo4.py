@@ -46,12 +46,13 @@ while (end==False):
     elif (numeroVille=="3"):
         city="Lyon"
     else:
-        city="Paris"
+        city="Rennes"
 
     
 
     endVille=False
     while (endVille==False):
+        print()
         print("Gestion des vélos de la ville de " + city + ".")
 
         goodInput2=False
@@ -78,11 +79,12 @@ while (end==False):
             while (endRecherche==False):
                 print()
                 print("Rechercher une station.")
-                rechercheVille=input("Entrer une partie du nom de la station recherchée (en MAJUSCULE), ou bien tapez 0 pour sortir :")
+                rechercheVille=input("Entrer une partie du nom de la station recherchée, ou bien tapez 0 pour sortir :")
                 if (rechercheVille=="0"):
                     endRecherche=True
                 else:
-                    stations=exo4_collection.find({"ville":city, "nomstation":{"$regex":rechercheVille}})
+                    queryname={"ville":city,"nomstation": {"$regex":rechercheVille, "$options":"i"}}
+                    stations=exo4_collection.find(queryname)
                     i=0
                     for station in stations:
                         i=i+1
@@ -103,7 +105,7 @@ while (end==False):
                             else:
                                 print("Erreur de saisie : merci d'entrer une commande existante.")
                         if (choix2=="2"):
-                            exo4_collection.delete_one({"ville":city, "nomstation":{"$regex":rechercheVille}})
+                            exo4_collection.delete_one({"ville":city, "nomstation":{"$regex":rechercheVille, "$options":"i"}})
                         elif (choix2=="1"):
                             print()
                             print("Veuillez entrer (1) pour modifier le nom ou (2) pour modifier l'état de la station. Pour annuler, entrez (0).")
@@ -111,13 +113,13 @@ while (end==False):
                             if (choix3=="1"):
                                 print()
                                 newname=input("Merci d'entrer le nouveau nom : ")
-                                myquery={"ville":city,"nomstation":{"$regex":rechercheVille}}
+                                myquery={"ville":city,"nomstation":{"$regex":rechercheVille, "$options":"i"}}
                                 newvalues={ "$set": { "nomstation": newname } }
                                 exo4_collection.update_one(myquery,newvalues)
                             elif (choix3=="2"):
                                 print()
                                 newetat=input("Merci d'entrer l'état actuel de la station, (1) pour EN SERVICE et (2) pour HORS SERVICE :")
-                                myquery={"ville":city,"nomstation":{"$regex":rechercheVille}}
+                                myquery={"ville":city,"nomstation":{"$regex":rechercheVille, "$options":"i"}}
                                 etatstation=""
                                 if(newetat=="1"):
                                     newvalues={ "$set": { "etat": "EN SERVICE" } }
