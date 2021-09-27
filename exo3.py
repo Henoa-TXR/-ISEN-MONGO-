@@ -17,7 +17,8 @@ exo3_collection.create_index([("location",GEOSPHERE)])
 
 exo2_collection=myDB['Exo2']
 
-cursor = exo2_collection.find({"etat":"EN SERVICE"})
+#Copie de la collection de l'exo sans les stations hors service et sans vélo
+cursor = exo2_collection.find({"etat":"EN SERVICE", "nombrevelo":{"$ne":"0"}})
 
 for doc in cursor:
     myDB['Exo3'].insert_one(doc)
