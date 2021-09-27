@@ -89,7 +89,7 @@ def lyon():
 
     lyonTab1=[]
     for input_station in infos_stations:
-        input_tab=[input_station["lat"],input_station["lng"]]
+        input_tab=[float(input_station["lat"]),float(input_station["lng"])]
         lyonTab1.append(input_tab)
     i=0
     lyonTab=[]
