@@ -4,7 +4,7 @@ import pymongo
 import requests
 
 #Connexion à la base mongo
-ConnectionString = "localhost:27017"
+ConnectionString = "mongodb+srv://Admin:CharlesLeBG@velo.sudxu.mongodb.net/Station?retryWrites=true&w=majority"
 myClient = MongoClient(ConnectionString)
 
 #Initialisation des collections
@@ -95,6 +95,8 @@ if(len(parisTab1)==len(parisTab2)):
     for i in range (0,len(parisTab1)):
         input_json={"ville":"Paris","nomstation":parisTab1[i][0],"nombrevelo":parisTab2[i][0],"nombreplaces":parisTab2[i][1],"etat":parisTab2[i][2],"location":{"type":"Point", "coordinates":[parisTab1[i][1],parisTab1[i][2]]}}
         parisTab.append(input_json)
+else:
+    print("ERROR IN PARIS' API")
 
 #Ajout des données dans la BDD
 exo1_collection.insert_many(parisTab)
